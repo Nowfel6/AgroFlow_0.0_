@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Management - AgroFlow</title>
+    <!-- Your CSS links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-color: #1e5631;
+            --secondary-color: #4c9f70;
+            --accent-color: #d4a017;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --light-text: #6c757d;
+            --border-color: #dee2e6;
+            --info-color: #17a2b8;
+            --success-color: #28a745; /* Added for the green button */
+        }
+
+        /* --- Global Resets --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Nunito', sans-serif; background-color: var(--background-color); color: var(--text-color); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Header & Nav --- */
+        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 700; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-profile { display: flex; align-items: center; cursor: pointer; }
+        .user-profile img { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; object-fit: cover; border: 2px solid white; }
+        .horizontal-nav { background-color: white; padding: 0 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: center; }
+        .nav-items { display: flex; gap: 5px; }
+        .nav-item { padding: 15px 20px; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent; }
+        .nav-item:hover, .nav-item.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); background-color: rgba(30, 86, 49, 0.05); }
+
+        /* --- Main Content & Sections --- */
+                .main-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto; /* Standard way to center */
+
+            /* --- ADD THESE THREE LINES --- */
+            display: grid;
+            grid-template-columns: 1fr; /* Create one column */
+            gap: 30px; /* This replaces the margin-bottom on the sections */
+        }
+                .dashboard-section {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            /* margin-bottom is no longer needed */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .section-header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .section-header h2 { color: var(--primary-color); font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+
+        /* --- Table Styles --- */
+        .requests-table { width: 100%; border-collapse: collapse; }
+        .requests-table th, .requests-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .requests-table th { background-color: rgba(30, 86, 49, 0.05); font-weight: 700; color: var(--primary-color); }
+
+        /* --- Button Styles --- */
+        .btn { border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: background-color 0.3s; background-color: var(--primary-color); color: white; }
+        .btn-info { background-color: var(--info-color); }
+        .btn-success { background-color: var(--success-color); }
+        .btn:hover { opacity: 0.9; }
+
+        /* --- Form Styles for Report Section --- */
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; color: var(--text-color); } /* Corrected variable */
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-family: "Nunito", sans-serif; font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .form-control:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(30, 86, 49, 0.1); }
+        .form-control[readonly] { background-color: #e9ecef; cursor: not-allowed; }
+            /* --- ADD THIS NEW RULE TO FIX THE REPORT SECTION SIZE --- */
+    .yearlyReportSection {
+        max-width: 800px; /* Constrain the width */
+        margin-left: auto;  /* Center the block horizontally */
+        margin-right: auto; /* Center the block horizontally */
+    }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"><i class="fas fa-leaf"></i> <span>AgroFlow</span></div>
+    <div class="user-info">
+        <div class="user-profile">
+            <img  src="/images/avatar-659651_1280.png" alt="Officer" />
+            <span id="userName">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<div class="horizontal-nav">
+    <!-- Your full navigation bar -->
+    <div class="nav-items">
+        <div class="nav-item"><a href="farmer-analytic.html">Dashboard</a></div>
+        <div class="nav-item"><a href="register-farmer.html">Register Farmer</a></div>
+        <div class="nav-item"><a href="farmer-dashboard.html">Registered Farmers</a></div>
+        <div class="nav-item"><a href="dashboard.html">Market & Crop Data</a></div>
+        <div class="nav-item active"><a href="sales-management.html">Sales Management</a></div>
+        <div class="nav-item"><a href="reports.html">Reports</a></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="dashboard-section" id="yearlyReportSection">
+        <div class="section-header">
+            <h2><i class="fas fa-balance-scale-right"></i> Pending Sale Requests</h2>
+        </div>
+        <div class="table-container">
+            <table class="requests-table">
+                <thead>
+                <tr>
+                    <th>Crop Name</th>
+                    <th>Farmer Name</th>
+                    <th>Harvest Amount (kg)</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="requestsTableBody">
+                <!-- Rows will be injected by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Update Yearly Report Section -->
+<div class="dashboard-section">
+    <div class="section-header">
+        <h2><i class="fas fa-file-alt"></i> Update Yearly Crop Report</h2>
+    </div>
+
+    <!-- Selection Form -->
+    <form id="reportSelectionForm" style="display: flex; gap: 15px; align-items: flex-end; margin-bottom: 25px;">
+        <div style="flex-grow: 1;">
+            <label for="reportCropSelect">Select Crop</label>
+            <select id="reportCropSelect" class="form-control" required></select>
+        </div>
+        <div style="flex-grow: 1;">
+            <label for="reportYearSelect">Select Year</label>
+            <select id="reportYearSelect" class="form-control" required>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+        <button type="submit" class="btn">Load/Generate Report</button>
+    </form>
+
+    <!-- Report Update Form (Initially Hidden) -->
+    <form id="updateReportForm" style="display: none;">
+        <input type="hidden" id="reportId">
+        <input type="hidden" id="reportCropId">
+        <input type="hidden" id="reportOfficerId">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px 30px;">
+            <div class="form-group">
+                <label>Total Yield (kg)</label>
+                <input type="number" step="0.01" id="reportTotalYield" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Total Area Cultivated (Acres)</label>
+                <input type="number" step="0.01" id="reportTotalArea" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Number of Farmers</label>
+                <input type="number" id="reportNumFarmers"  class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Region</label>
+                <input type="text" id="reportRegion" class="form-control" readonly>
+            </div>
+        </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button type="submit" class="btn btn-success">Save/Update Report</button>
+        </div>
+    </form>
+</div>
+<script>
+    // Global function to be called by the "Details" button
+    function viewRequestDetails(saleRequestId) {
+        // Store the ID of the request we want to view
+        sessionStorage.setItem('selectedSaleRequestId', saleRequestId);
+        // Navigate to the new details page (which you will create next)
+        window.location.href = 'sale-request-details.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        // --- 1. LOGIN CHECK & UI SETUP ---
+        const officerString = sessionStorage.getItem('loggedInOfficer');
+        let loggedInOfficer = null;
+        if (officerString) {
+            loggedInOfficer = JSON.parse(officerString);
+            document.getElementById('userName').textContent = loggedInOfficer.name;
+        } else {
+            alert("You are not logged in.");
+            window.location.href = 'login.html';
+            return;
+        }
+        // --- PART 3: YEARLY REPORT LOGIC ---
+
+const reportSelectionForm = document.getElementById('reportSelectionForm');
+const updateReportForm = document.getElementById('updateReportForm');
+const cropSelect = document.getElementById('reportCropSelect');
+
+// Function to populate the crop dropdown
+async function populateCropDropdown() {
+    try {
+        const response = await fetch('/api/crops');
+        const crops = await response.json();
+        cropSelect.innerHTML = '<option value="">Select a crop</option>';
+        crops.forEach(crop => {
+            cropSelect.add(new Option(crop.name, crop.id));
+        });
+    } catch (error) {
+        console.error("Failed to load crops for report:", error);
+    }
+}
+// Call the function to populate dropdown on page load
+populateCropDropdown();
+
+// Handle selection of crop and year
+reportSelectionForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const cropId = cropSelect.value;
+    const year = document.getElementById('reportYearSelect').value;
+    if (!cropId || !year) {
+        alert("Please select a crop and a year.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/reports/generate?officerId=${loggedInOfficer.id}&cropId=${cropId}&sessionYear=${year}`);
+        const reportData = await response.json();
+
+        // Populate the update form with the fetched/calculated data
+        document.getElementById('reportId').value = reportData.id || '';
+        document.getElementById('reportCropId').value = reportData.cropId;
+        document.getElementById('reportOfficerId').value = reportData.officerId;
+        document.getElementById('reportTotalYield').value = reportData.total_yield || 0;
+        document.getElementById('reportTotalArea').value = reportData.total_area_cultivated || 0;
+        document.getElementById('reportNumFarmers').value = reportData.no_of_farmer || 0;
+        document.getElementById('reportRegion').value = reportData.region || '';
+
+        updateReportForm.style.display = 'block'; // Show the form
+    } catch (error) {
+        console.error("Failed to generate report:", error);
+        alert("Could not load or generate report data.");
+    }
+});
+
+// Handle the final update/save submission
+updateReportForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const reportDTO = {
+        id: document.getElementById('reportId').value || null,
+        cropId: document.getElementById('reportCropId').value,
+        officerId: document.getElementById('reportOfficerId').value,
+        session_year: document.getElementById('reportYearSelect').value,
+        total_yield: document.getElementById('reportTotalYield').value,
+        total_area_cultivated: document.getElementById('reportTotalArea').value,
+        no_of_farmer: document.getElementById('reportNumFarmers').value,
+        region: document.getElementById('reportRegion').value
+    };
+
+    try {
+        const response = await fetch('/api/reports/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reportDTO)
+        });
+
+        if (response.ok) {
+            alert('Report has been saved/updated successfully!');
+            updateReportForm.style.display = 'none'; // Hide the form again
+            reportSelectionForm.reset();
+        } else {
+            alert('Failed to save the report.');
+        }
+    } catch (error) {
+        console.error("Failed to save report:", error);
+    }
+});
+        // --- 2. FETCH & RENDER THE SUMMARY LIST ---
+        const tableBody = document.getElementById('requestsTableBody');
+        try {
+            const response = await fetch(`/api/salerequests/officer/${loggedInOfficer.id}`);
+            if (!response.ok) throw new Error('Failed to fetch sale requests.');
+
+            const requests = await response.json();
+
+            if (!requests || requests.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">There are no pending sale requests.</td></tr>';
+                return;
+            }
+
+            const rowsHTML = requests.map(req => `
+                <tr>
+                    <td>${req.cropName}</td>
+                    <td>${req.farmerName}</td>
+                    <td>${req.harvestAmount}</td>
+                    <td>
+                        <a href="#" onclick="viewRequestDetails(${req.id}); return false;" class="btn btn-info">Details</a>
+                    </td>
+                </tr>
+            `).join('');
+            tableBody.innerHTML = rowsHTML;
+
+        } catch (error) {
+            console.error('Error fetching sale requests:', error);
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Error loading requests.</td></tr>';
+        }
+        // ... inside your DOMContentLoaded listener, after the existing code ...
+
+
+
+
+
+
+    });
+</script>
+</body>
+</html>

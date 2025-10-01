@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sale Request Details - AgroFlow</title>
+    <!-- Your CSS links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* Your full CSS from other pages */
+        :root { --primary-color: #1e5631; --danger-color: #dc3545; --success-color: #28a745; /* ... etc ... */ }
+        body { font-family: 'Nunito', sans-serif; background-color: #f8f9fa; color: #333; }
+        a { text-decoration: none; color: inherit; }
+        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 700; }
+        .user-info { display: flex; align-items: center; }
+         .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+        .user-profile img { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+        .horizontal-nav { background-color: white; padding: 0 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: center; }
+        .nav-item { padding: 15px 20px; font-weight: 600; }
+        .main-content { padding: 30px; max-width: 1000px; margin: auto; }
+        .dashboard-section { background-color: #fff; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .section-header h2 { color: var(--primary-color); font-size: 1.6rem; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #dee2e6; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 30px; }
+        .detail-item { font-size: 1rem; }
+        .detail-item .label { color: #6c757d; display: block; font-size: 0.9rem; }
+        .detail-item .value { font-weight: 600; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #dee2e6; font-size: 1rem; }
+        .action-buttons { display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px; }
+        .btn { border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-danger { background-color: var(--danger-color); color: white; }
+        .market-price-info {
+            font-size: 0.85rem;
+            color: var(--light-text);
+            background-color: #f8f9fa;
+            padding: 5px 8px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"><i class="fas fa-leaf"></i> <span>AgroFlow</span></div>
+    <div class="user-info">
+        <div class="user-profile">
+            <img  src="/images/avatar-659651_1280.png" alt="Officer" />
+            <span id="userName">Loading...</span>
+        </div>
+    </div>
+</div>
+<div class="horizontal-nav">
+    <div class="nav-items">
+        <div class="nav-item"><a href="sales-management.html"><i class="fas fa-arrow-left"></i> Back to Request List</a></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!-- Details Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2 id="detailsHeader">Sale Request Details</h2>
+        </div>
+        <div class="details-grid" id="detailsGrid">
+            <!-- Details will be injected here -->
+        </div>
+    </div>
+
+    <!-- Approval Form Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-check-circle"></i> Approve Sale</h2>
+        </div>
+        <form id="approveSaleForm">
+            <div class="details-grid">
+                <div class="form-group">
+                    <label for="final_quantity">Final Quantity (kg)</label>
+                    <input type="number" step="0.01" id="final_quantity" required />
+                </div>
+                <div class="form-group">
+                    <label for="final_price_per_kg">Final Price/kg </label>
+                    <div id="marketPriceInfo" class="market-price-info">
+                        <!-- JS will populate this -->
+                    </div>
+                    <input type="number" step="0.01" id="final_price_per_kg" required />
+                </div>
+                <div class="form-group">
+                    <label for="sale_date">Sale Date</label>
+                    <input type="date" id="sale_date" required />
+                </div>
+                <div class="form-group">
+                    <label for="payment_status">Payment Status</label>
+                    <select id="payment_status" required>
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button type="button" class="btn btn-danger" id="rejectBtn">Reject Request</button>
+                <button type="submit" class="btn btn-success">Approve and Create Sale</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // --- 1. LOGIN & CONTEXT CHECK ---
+        const officerString = sessionStorage.getItem('loggedInOfficer');
+        if (officerString) {
+            document.getElementById('userName').textContent = JSON.parse(officerString).name;
+        } else {
+            alert("You are not logged in.");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const selectedSaleRequestId = sessionStorage.getItem('selectedSaleRequestId');
+        if (!selectedSaleRequestId) {
+            alert("No sale request selected. Returning to list.");
+            window.location.href = 'sales-management.html';
+            return;
+        }
+
+        // --- 2. FETCH & RENDER DETAILS ---
+        try {
+            const response = await fetch(`/api/salerequests/${selectedSaleRequestId}/details`);
+            if (!response.ok) throw new Error('Could not find sale request details.');
+
+            // 'details' IS the flat DTO object with all the properties we need.
+            const details = await response.json();
+
+            // Pass the 'details' object directly to the functions.
+            populateDetails(details);
+            populateMarketPriceHint(details.currentMarketPrice);
+
+        } catch (error) {
+            console.error('Error fetching details:', error);
+            alert(error.message);
+        }
+
+        // --- UPDATED populateDetails function ---
+        // The parameter 'req' is now the flat DTO itself.
+        function populateDetails(req) {
+            const detailsGrid = document.getElementById('detailsGrid');
+            // Now we can access properties directly, e.g., req.cropName
+            document.getElementById('detailsHeader').textContent = `Sale Request for ${req.cropName}`;
+
+            let bankInfoHTML = '';
+            if (req.payment_mode_requested === 'Bank Account') {
+                bankInfoHTML = `
+                    <div class="detail-item"><span class="label">Bank Name</span><span class="value">${req.bank_name || 'N/A'}</span></div>
+                    <div class="detail-item"><span class="label">Account Name</span><span class="value">${req.account_holder_name || 'N/A'}</span></div>
+                    <div class="detail-item"><span class="label">Account Number</span><span class="value">${req.account_number || 'N/A'}</span></div>
+                    <div class="detail-item"><span class="label">Routing NUmber</span><span class="value">${req.ifsc_code || 'N/A'}</span></div>
+                `;
+            } else if (req.payment_mode_requested === 'Online/Mobile') {
+                bankInfoHTML = `<div class="detail-item"><span class="label">Mobile Number</span><span class="value">${req.online_banking_no || 'N/A'}</span></div>`;
+            }
+
+            detailsGrid.innerHTML = `
+                <div class="detail-item"><span class="label">Farmer Name</span><span class="value">${req.farmerName}</span></div>
+                <div class="detail-item"><span class="label">Crop Name</span><span class="value">${req.cropName}</span></div>
+                <div class="detail-item"><span class="label">Quantity Requested</span><span class="value">${req.quantity_requested} kg</span></div>
+                <div class="detail-item"><span class="label">Price Suggested</span><span class="value">${req.price_per_kg_requested} / kg</span></div>
+                <div class="detail-item"><span class="label">Payment Mode</span><span class="value">${req.payment_mode_requested}</span></div>
+                <div class="detail-item"><span class="label">Delivery Status</span><span class="value">${req.delivery_status}</span></div>
+                ${bankInfoHTML}
+            `;
+
+            // Pre-fill the approval form
+            document.getElementById('final_quantity').value = req.quantity_requested;
+            document.getElementById('final_price_per_kg').value = req.price_per_kg_requested;
+            document.getElementById('sale_date').valueAsDate = new Date();
+        }
+
+        function populateMarketPriceHint(priceValue) {
+            const infoDiv = document.getElementById('marketPriceInfo');
+            if (priceValue !== null && priceValue !== undefined) {
+                infoDiv.innerHTML = `Current Market Price: <strong>৳${Number(priceValue).toFixed(2)}</strong>`;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.textContent = 'No current market price data available.';
+                infoDiv.style.display = 'block';
+            }
+        }
+
+        // --- 3. HANDLE ACTIONS (APPROVE / REJECT) ---
+        const approveSaleForm = document.getElementById('approveSaleForm');
+        approveSaleForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const saleData = {
+                final_quantity: document.getElementById('final_quantity').value,
+                final_price_per_kg: document.getElementById('final_price_per_kg').value,
+                sale_date: document.getElementById('sale_date').value,
+                payment_status: document.getElementById('payment_status').value,
+                // Assuming payment_mode is inherited from the request, you'll need the original request object.
+                // It's better to fetch it again or store it in a broader scope.
+                // For now, let's assume we can get it.
+                // payment_mode: details.saleRequest.payment_mode_requested
+            };
+
+            try {
+                const response = await fetch(`/api/sales/approve?saleRequestId=${selectedSaleRequestId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(saleData)
+                });
+
+                if (response.ok) {
+                    alert('Sale has been approved and created successfully!');
+                    sessionStorage.setItem('profileNeedsRefresh', 'true');
+                    window.location.href = 'sales-management.html';
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`Approval failed: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error('Error approving sale:', error);
+                alert('An error occurred during approval.');
+            }
+        });
+
+        const rejectBtn = document.getElementById('rejectBtn');
+        rejectBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to reject this sale request?')) {
+                alert('Sale request has been rejected.');
+                window.location.href = 'sales-management.html';
+            }
+        });
+    });
+</script>
+</body>
+</html>
+</body>
+</html>

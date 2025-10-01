@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Crop Plan - AgroFlow</title>
+    <!-- Add your CSS links (Font Awesome, Nunito) here -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* Your full CSS from other pages should be here for consistency */
+       :root {
+          --primary-color: #1e5631;
+          --secondary-color: #4c9f70;
+          --accent-color: #d4a017;
+          --background-color: #f8f9fa;
+          --card-color: #ffffff;
+          --text-color: #333333;
+          --light-text: #6c757d;
+          --border-color: #dee2e6;
+        }
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        body {
+          font-family: "Nunito", sans-serif;
+          background-color: var(--background-color);
+          color: var(--text-color);
+          line-height: 1.6;
+        }
+        /* Add all your other styles: .header, .btn, .form-section, etc. */
+        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; font-size: 1.5rem; font-weight: 700; }
+        .user-info { display: flex; align-items: center; }
+         .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+        .user-profile img { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+        .horizontal-nav { background-color: white; padding: 0 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: center; }
+        .nav-item { padding: 15px 20px; font-weight: 600; }
+        .main-content { padding: 30px; }
+        .form-section { background-color: #fff; border-radius: 12px; padding: 30px; max-width: 900px; margin: auto; }
+        .section-header h2 { color: var(--primary-color); font-size: 1.6rem; }
+        .add-plan-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select { padding: 12px; border: 1px solid #dee2e6; border-radius: 6px; font-size: 1rem; }
+        .form-actions { grid-column: 1 / -1; text-align: right; margin-top: 20px; }
+        .btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"><i class="fas fa-leaf"></i> <span>AgroFlow</span></div>
+    <div class="user-info">
+        <div class="user-profile">
+            <img  src="/images/avatar-659651_1280.png" alt="Officer" />
+            <span id="userName">Loading...</span>
+        </div>
+    </div>
+</div>
+<div class="horizontal-nav">
+    <div class="nav-items">
+        <div class="nav-item">
+            <a href="farmer-profile.html"><i class="fas fa-arrow-left"></i> Back to Farmer Profile</a>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="form-section">
+        <div class="section-header">
+            <h2><i class="fas fa-calendar-plus"></i> Add New Crop Plan</h2>
+        </div>
+        <form class="add-plan-form" id="addPlanForm">
+            <!-- Field Dropdown -->
+            <div class="form-group">
+                <label for="field">Select Field</label>
+                <select id="field" required>
+                    <option value="">Loading available fields...</option>
+                </select>
+            </div>
+            <!-- Crop Dropdown -->
+            <div class="form-group">
+                <label for="crop">Select Crop</label>
+                <select id="crop" required>
+                    <option value="">Loading all crops...</option>
+                </select>
+            </div>
+            <!-- Season -->
+            <div class="form-group">
+                <label for="season">Season</label>
+                <input type="text" id="season" placeholder="e.g., Rabi 2024-25" required />
+            </div>
+            <!-- Status -->
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" value="Ongoing" readonly />
+            </div>
+            <!-- Planting Date -->
+            <div class="form-group">
+                <label for="planting_date">Planting Date</label>
+                <input type="date" id="planting_date" required />
+            </div>
+            <!-- Expected Harvest Date -->
+            <div class="form-group">
+                <label for="expected_harvest_date">Expected Harvest Date</label>
+                <input type="date" id="expected_harvest_date" required />
+            </div>
+            <!-- Expected Yield -->
+            <div class="form-group">
+                <label for="expected_yield">Expected Yield (in kg)</label>
+                <input type="number" id="expected_yield" placeholder="e.g., 10000" required />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Crop Plan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // --- 1. HANDLE LOGIN & GET IDs ---
+        const officerString = sessionStorage.getItem('loggedInOfficer');
+        if (officerString) {
+            document.getElementById('userName').textContent = JSON.parse(officerString).name;
+        } else {
+            alert("You are not logged in.");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const selectedFarmerId = sessionStorage.getItem('selectedFarmerId');
+        if (!selectedFarmerId) {
+            alert("No farmer selected. Returning to list.");
+            window.location.href = 'farmer-dashboard.html';
+            return;
+        }
+
+        // --- 2. POPULATE DROPDOWNS DYNAMICALLY ---
+        const fieldSelect = document.getElementById('field');
+        const cropSelect = document.getElementById('crop');
+
+        // Fetch and populate available fields for the farmer
+        try {
+            const fieldResponse = await fetch(`/api/fields/farmer/${selectedFarmerId}`);
+            const fields = await fieldResponse.json();
+            fieldSelect.innerHTML = '<option value="" disabled selected>Choose a field</option>'; // Reset
+            fields.forEach(field => {
+                // Here you would add logic to check if the field is available
+                const option = new Option(`${field.name} (${field.size} Acres)`, field.id);
+                fieldSelect.add(option);
+            });
+        } catch (error) {
+            console.error('Failed to load fields:', error);
+            fieldSelect.innerHTML = '<option value="">Error loading fields</option>';
+        }
+
+        // Fetch and populate all available crops
+        try {
+            const cropResponse = await fetch(`/api/crops`);
+            const crops = await cropResponse.json();
+            cropSelect.innerHTML = '<option value="" disabled selected>Choose a crop</option>'; // Reset
+            crops.forEach(crop => {
+                const option = new Option(crop.name, crop.id);
+                cropSelect.add(option);
+            });
+        } catch (error) {
+            console.error('Failed to load crops:', error);
+            cropSelect.innerHTML = '<option value="">Error loading crops</option>';
+        }
+
+        // --- 3. FORM SUBMISSION HANDLER ---
+        const addPlanForm = document.getElementById("addPlanForm");
+        addPlanForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            // --- THIS IS THE FIX ---
+            // Get the date values from the input fields
+            const plantingDateValue = document.getElementById('planting_date').value;
+            const harvestDateValue = document.getElementById('expected_harvest_date').value;
+
+            // Build the data object, ensuring dates are null if the input is empty
+            const cropPlanData = {
+                plantingDate: plantingDateValue ? plantingDateValue : null,
+                expectedHarvestDate: harvestDateValue ? harvestDateValue : null,
+                expected_yield: document.getElementById('expected_yield').value,
+                season: document.getElementById('season').value,
+                status: document.getElementById('status').value,
+
+                farmer: { id: selectedFarmerId },
+                crop: { id: document.getElementById('crop').value },
+                field: { id: document.getElementById('field').value }
+            };
+
+            // Basic validation for dates
+            if (!cropPlanData.plantingDate || !cropPlanData.expectedHarvestDate) {
+                alert("Please select both a planting and a harvest date.");
+                return;
+
+            }
+
+            // Send data to the backend
+            try {
+                const response = await fetch('/api/cropplans/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cropPlanData)
+                });
+
+                if (response.ok) {
+                    alert("New crop plan has been successfully added!");
+                    sessionStorage.setItem('profileNeedsRefresh', 'true');
+                    window.location.href = "farmer-profile.html";
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`Failed to add crop plan: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while saving the crop plan.');
+            }
+        });
+    });
+</script>
+</body>
+</html>```

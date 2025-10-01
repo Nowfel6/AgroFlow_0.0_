@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - AgroFlow</title>
+    <!-- Your CSS and Font links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+        --primary-color: #1e5631;
+        --secondary-color: #4c9f70;
+        --accent-color: #d4a017;
+        --background-color: #f8f9fa;
+        --card-color: #ffffff;
+        --text-color: #333333;
+        --light-text: #6c757d;
+        --border-color: #dee2e6;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+ body { font-family: 'Nunito', sans-serif; background-color: #f8f9fa; }
+        .header { background-color: var(--primary-color); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; }
+        .user-info { display: flex; align-items: center; }
+        .user-profile { display: flex; align-items: center; cursor: pointer; }
+        .user-profile img { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+        .horizontal-nav { background-color: white; padding: 0 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: center; }
+        .nav-item { padding: 15px 20px; font-weight: 600; }
+        .main-content { padding: 30px; max-width: 900px; margin: auto; }
+        .form-section { background-color: #fff; border-radius: 12px; padding: 30px; }
+        .section-header h2 { color: var(--primary-color); }
+        .profile-form { display: grid; grid-template-columns: 200px 1fr; gap: 30px; align-items: center; }
+        .avatar-upload img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary-color); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; }
+        .form-group label { font-weight: 600; margin-bottom: 8px; display: block; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #dee2e6; border-radius: 6px; font-size: 1rem; }
+        .form-group input[readonly] { background-color: #e9ecef; }
+        .form-actions { grid-column: 1 / -1; text-align: right; margin-top: 20px; }
+        .btn { background-color: var(--primary-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 700; } </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"><i class="fas fa-leaf"></i> <span>AgroFlow</span></div>
+    <div class="user-info">
+        <div class="user-profile">
+            <img src="/images/avatar-659651_1280.png" alt="Officer" />
+            <span id="userName">Loading...</span>
+        </div>
+    </div>
+</div>
+<div class="horizontal-nav">
+    <div class="nav-items">
+        <div class="nav-item"><a href="farmer-analytic.html"><i class="fas fa-arrow-left"></i> Back to Dashboard</a></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="form-section">
+        <div class="section-header">
+            <h2><i class="fas fa-user-edit"></i> My Profile</h2>
+        </div>
+        <form id="profileUpdateForm" class="profile-form">
+            <div class="avatar-upload">
+                <img src="/images/avatar-659651_1280.png" alt="Profile Picture">
+                <!-- File upload could be added here later -->
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact Number</label>
+                    <input type="tel" id="contact" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="nid">National ID (NID)</label>
+                    <input type="text" id="nid" readonly>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="office_location">Office Location</label>
+                    <input type="text" id="office_location" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Update Profile</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // --- 1. LOGIN CHECK & GET DATA ---
+        const officerString = sessionStorage.getItem('loggedInOfficer');
+        let loggedInOfficer = null;
+        if (officerString) {
+            loggedInOfficer = JSON.parse(officerString);
+            document.getElementById('userName').textContent = loggedInOfficer.name;
+        } else {
+            alert("You are not logged in.");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Fetch full profile details to populate the form
+        try {
+            const response = await fetch(`/api/officers/${loggedInOfficer.id}`);
+            const officerDetails = await response.json();
+
+            // --- THIS IS THE FIX ---
+            // Populate the form using the EXACT property names from the JSON response
+            document.getElementById('name').value = officerDetails.name || '';
+            document.getElementById('contact').value = officerDetails.contact || '';
+            document.getElementById('email').value = officerDetails.email || '';
+            document.getElementById('nid').value = officerDetails.nid || '';
+            document.getElementById('office_location').value = officerDetails.office_location || ''; // Use snake_case
+
+        } catch(error) {
+            console.error("Failed to load profile data:", error);
+            alert("Could not load your profile data.");
+        }
+
+        // --- 2. FORM SUBMISSION HANDLER ---
+        const profileUpdateForm = document.getElementById('profileUpdateForm');
+        profileUpdateForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Build the DTO object for the update
+            // The keys MUST match the fields in your ProfileUpdateDTO.java
+            const updateData = {
+                name: document.getElementById('name').value,
+                contact: document.getElementById('contact').value,
+                office_location: document.getElementById('office_location').value // Use snake_case
+            };
+
+            try {
+                const response = await fetch(`/api/officers/${loggedInOfficer.id}/update`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData)
+                });
+
+                if (response.ok) {
+                    const updatedOfficer = await response.json();
+                    // IMPORTANT: Update sessionStorage with the new details
+                    sessionStorage.setItem('loggedInOfficer', JSON.stringify(updatedOfficer));
+                    alert("Profile updated successfully!");
+                    // Refresh the name in the header
+                    document.getElementById('userName').textContent = updatedOfficer.name;
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`Update failed: ${errorMessage}`);
+                }
+            } catch(error) {
+                console.error("Failed to update profile:", error);
+                alert("An error occurred during the update.");
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

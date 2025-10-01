@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer Analytics - AgroFlow</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <!-- Your CSS and Font links -->
+    <style> :root {
+        --primary-color: #1e5631;
+        --secondary-color: #4c9f70;
+        --accent-color: #d4a017;
+        --background-color: #f8f9fa;
+        --card-color: #ffffff;
+        --text-color: #333333;
+        --light-text: #6c757d;
+        --border-color: #dee2e6;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Nunito", sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      /* Header */
+      .header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .logo i {
+        margin-right: 10px;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+ .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .user-profile img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+        border: 2px solid white;
+      }
+       .profile-container {
+          position: relative;
+        }
+
+      /* Horizontal Navigation */
+      .horizontal-nav {
+        background-color: white;
+        padding: 0 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .nav-items {
+        display: flex;
+        gap: 5px;
+      }
+
+      .nav-item {
+        padding: 15px 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        border-bottom: 3px solid transparent;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color);
+        background-color: rgba(30, 86, 49, 0.05);
+      }
+.dropdown-menu {
+          display: none; /* Hidden by default */
+          position: absolute;
+          top: 50px; /* Position below the header items */
+          right: 0;
+          background-color: var(--card-color);
+          min-width: 240px; /* Wider for notifications */
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+          border-radius: 8px;
+          z-index: 100;
+          border: 1px solid var(--border-color);
+          overflow: hidden;
+        }
+
+        /* Class to show the dropdown */
+        .dropdown-menu.show {
+          display: block;
+        }
+
+        .dropdown-item {
+          color: var(--text-color);
+          padding: 12px 16px;
+          display: block;
+          transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+          background-color: #f1f1f1;
+        }
+
+        .dropdown-item strong {
+          color: var(--primary-color);
+        }
+
+        .dropdown-item span {
+          font-size: 0.9rem;
+          color: var(--light-text);
+        }
+
+        .dropdown-divider {
+          height: 1px;
+          margin: 0;
+          background-color: var(--border-color);
+        }
+
+        .all-notifications {
+          text-align: center;
+          font-weight: 600;
+          color: var(--primary-color);
+        }
+      /* Main Content */
+      .main-content {
+        padding: 30px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      /* Stats Overview */
+      .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background-color: var(--card-color);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .stat-card .icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        background-color: rgba(30, 86, 49, 0.1);
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .stat-card .info .value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-color);
+      }
+
+      .stat-card .info .label {
+        font-size: 1rem;
+        color: var(--light-text);
+      }
+
+      .dashboard-section {
+        background-color: var(--card-color);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+
+      .section-header {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .section-header h2 {
+        color: var(--primary-color);
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Search Bar */
+      .search-bar {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .search-bar input {
+        flex-grow: 1;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-family: "Nunito", sans-serif;
+        font-size: 1rem;
+      }
+
+      .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 700;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: var(--secondary-color);
+      }
+
+      /* Tables */
+      .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      .results-table th,
+      .results-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .results-table th {
+        background-color: rgba(30, 86, 49, 0.05);
+        color: var(--primary-color);
+        font-weight: 700;
+      }
+
+      .results-table tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      .placeholder-text {
+        text-align: center;
+        margin-top: 20px;
+        color: var(--light-text);
+        padding: 20px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .header,
+        .horizontal-nav {
+          flex-direction: column;
+          padding: 15px;
+        }
+        .nav-items {
+          width: 100%;
+          overflow-x: auto;
+          padding-bottom: 10px;
+        }
+      } </style>
+</head>
+<body>
+<!-- Header -->
+<div class="header">
+    <div class="logo">
+        <i class="fas fa-leaf"></i>
+        <span>AgroFlow</span>
+    </div>
+    <div class="user-info">
+        <!-- The Profile Container is the only item left -->
+        <div class="profile-container">
+            <div class="user-profile" id="userProfileBtn">
+                <img id="userAvatar"  src="/images/avatar-659651_1280.png" alt="Officer" />
+                <span id="userName">Loading...</span>
+            </div>
+            <!-- Profile Dropdown Menu -->
+            <div class="dropdown-menu" id="profileDropdown">
+                <a href="officer-profile.html" class="dropdown-item">My Profile</a>
+<!--                <a href="#" class="dropdown-item">Settings</a>-->
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item" id="logoutBtn">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="horizontal-nav">
+    <!-- Your full navigation bar -->
+    <div class="nav-items">
+        <div class="nav-item active"><a href="farmer-analytic.html">Dashboard</a></div>
+        <div class="nav-item"><a href="register-farmer.html">Register Farmer</a></div>
+        <div class="nav-item"><a href="farmer-dashboard.html">Registered Farmers</a></div>
+        <div class="nav-item "><a href="dashboard.html">Market & Crop Data</a></div>
+        <div class="nav-item"><a href="sales-management.html">Sales Management</a></div>
+        <div class="nav-item"><a href="reports.html">Reports</a></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!-- Stats Overview Section -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="info">
+                <div class="value" id="totalFarmersStat">--</div>
+                <div class="label">Total Farmers</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="icon"><i class="fas fa-clipboard-list"></i></div>
+            <div class="info">
+                <div class="value" id="ongoingPlansStat">--</div>
+                <div class="label">Ongoing Crop Plans</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="icon"><i class="fas fa-tractor"></i></div>
+            <div class="info">
+                <div class="value" id="harvestedPlansStat">--</div>
+                <div class="label">Harvested Crops</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search by Crop Section (Functionality to be added separately) -->
+    <!-- RESTORED SEARCH BY CROP SECTION -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-search-location"></i> Find Farmers by Crop</h2>
+        </div>
+        <form class="search-bar" id="cropSearchForm">
+            <input type="text" id="cropNameSearch" placeholder="Enter crop name (e.g., Potato)" required />
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <div id="searchResultsContainer" style="display: none;">
+            <table class="results-table">
+                <thead><tr><th>Farmer Name</th><th>Field Name</th><th>Planting Date</th><th>Days Left</th></tr></thead>
+                <tbody id="searchResultsBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Ongoing Crop Plans Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-tasks"></i> Ongoing Farmer Crop Plans</h2>
+        </div>
+        <table class="results-table">
+            <thead><tr><th>Farmer Name</th><th>Crop</th><th>Field</th><th>Days Left</th><th>Expected Harvest</th></tr></thead>
+            <tbody id="ongoingPlansTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Unused Fields Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-times-circle"></i> Fields without Ongoing Plans</h2>
+        </div>
+        <table class="results-table">
+            <thead><tr><th>Farmer Name</th><th>Field Name</th><th>Size (Acres)</th></tr></thead>
+            <tbody id="unusedFieldsTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Overall Harvest Summary -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-bar"></i> Overall Harvest Summary </h2>
+        </div>
+        <table class="results-table">
+            <thead><tr><th>Crop Name</th><th>Total Area (Acres)</th><th>Total Yield (kg)</th><th>Season</th></tr></thead>
+            <tbody id="harvestSummaryTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // =================================================================
+        // SECTION 1: LOGIN CHECK & UI SETUP
+        // =================================================================
+        const officerString = sessionStorage.getItem('loggedInOfficer');
+        let loggedInOfficer = null;
+        if (officerString) {
+            loggedInOfficer = JSON.parse(officerString);
+            document.getElementById('userName').textContent = loggedInOfficer.name;
+        } else {
+            alert("You are not logged in.");
+            window.location.href = 'login.html';
+            return; // IMPORTANT: Stop all further script execution if not logged in
+        }
+
+        // =================================================================
+        // SECTION 2: FETCH INITIAL ANALYTICS DATA
+        // =================================================================
+        try {
+            const response = await fetch(`/api/analytics/officer/${loggedInOfficer.id}`);
+            if (!response.ok) throw new Error('Failed to load analytics data.');
+            const data = await response.json();
+
+            // Populate all sections on page load
+            populateStats(data);
+            populateOngoingPlans(data.ongoingCropPlansList);
+            populateUnusedFields(data.unusedFieldsList);
+            populateHarvestSummary(data.harvestSummaryList);
+
+        } catch (error) {
+            console.error("Error fetching analytics:", error);
+            // You could add error messages to the tables here
+        }
+
+        // =================================================================
+        // SECTION 3: SETUP THE SEARCH FORM EVENT LISTENER
+        // =================================================================
+        const cropSearchForm = document.getElementById('cropSearchForm');
+        const searchResultsContainer = document.getElementById('searchResultsContainer');
+        const searchResultsBody = document.getElementById('searchResultsBody');
+
+        if (cropSearchForm) {
+            cropSearchForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const cropName = document.getElementById('cropNameSearch').value;
+                if (!cropName.trim()) {
+                    searchResultsContainer.style.display = 'none';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/analytics/search-crop?officerId=${loggedInOfficer.id}&cropName=${cropName}`);
+                    const results = await response.json();
+
+                    if (results && results.length > 0) {
+                        searchResultsBody.innerHTML = results.map(plan => `
+                            <tr>
+                                <td>${plan.farmerName}</td>
+                                <td>${plan.fieldName}</td>
+                                <td>${new Date(plan.plantingDate).toLocaleDateString()}</td>
+                                <td>${plan.daysLeft < 0 ? 'Overdue' : plan.daysLeft}</td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        searchResultsBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No ongoing plans found for this crop.</td></tr>';
+                    }
+                    searchResultsContainer.style.display = 'block';
+                } catch (error) {
+                    console.error('Search failed:', error);
+                    searchResultsBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">An error occurred during search.</td></tr>';
+                    searchResultsContainer.style.display = 'block';
+                }
+            });
+        }
+
+        // =================================================================
+        // SECTION 4: GENERAL UI INTERACTIVITY (NAV, DROPDOWNS, LOGOUT)
+        // =================================================================
+
+        // Navigation active state
+        // This is not strictly needed if your HTML already has the 'active' class, but it's good for dynamic pages.
+        document.querySelectorAll(".nav-item").forEach((item) => {
+            // Logic to set the 'active' class based on the current page URL
+            const link = item.querySelector('a');
+            if (link && window.location.href.includes(link.getAttribute('href'))) {
+                 document.querySelectorAll(".nav-item").forEach(nav => nav.classList.remove("active"));
+                 item.classList.add("active");
+            }
+        });
+
+        // Profile Dropdown Logic
+        const userProfileBtn = document.getElementById("userProfileBtn");
+        const profileDropdown = document.getElementById("profileDropdown");
+
+        if (userProfileBtn && profileDropdown) {
+            userProfileBtn.addEventListener("click", function (event) {
+                event.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+        }
+
+        // Logout functionality
+        const logoutBtn = document.getElementById('logoutBtn');
+        if(logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('loggedInOfficer');
+                alert('You have been logged out.');
+                window.location.href = 'login.html';
+            });
+        }
+
+        // Close dropdown on outside click
+        window.addEventListener("click", function (event) {
+            if (profileDropdown && !event.target.closest(".profile-container")) {
+                profileDropdown.classList.remove("show");
+            }
+        });
+    }); // --- END OF DOMContentLoaded LISTENER ---
+
+    // =================================================================
+    // SECTION 5: HELPER FUNCTIONS (can remain outside)
+    // =================================================================
+
+    function populateStats(data) {
+        document.getElementById('totalFarmersStat').textContent = data.totalFarmers;
+        document.getElementById('ongoingPlansStat').textContent = data.ongoingCropPlans;
+        document.getElementById('harvestedPlansStat').textContent = data.harvestedCropPlans;
+    }
+
+    function populateOngoingPlans(plans) {
+        const tableBody = document.getElementById('ongoingPlansTableBody');
+        if (!plans || plans.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No ongoing crop plans.</td></tr>';
+            return;
+        }
+        tableBody.innerHTML = plans.map(plan => `
+            <tr>
+                <td>${plan.farmerName}</td>
+                <td>${plan.cropName}</td>
+                <td>${plan.fieldName}</td>
+                <td>${plan.daysLeft < 0 ? 'Overdue' : plan.daysLeft}</td>
+                <td>${new Date(plan.expectedHarvestDate).toLocaleDateString()}</td>
+            </tr>
+        `).join('');
+    }
+
+    function populateUnusedFields(fields) {
+        const tableBody = document.getElementById('unusedFieldsTableBody');
+        if (!fields || fields.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">All fields are currently in use.</td></tr>';
+            return;
+        }
+        tableBody.innerHTML = fields.map(field => `
+            <tr>
+                <td>${field.farmerName}</td>
+                <td>${field.fieldName}</td>
+                <td>${field.size}</td>
+            </tr>
+        `).join('');
+    }
+
+    function populateHarvestSummary(summary) {
+        const tableBody = document.getElementById('harvestSummaryTableBody');
+        if (!summary || summary.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No harvest data to summarize.</td></tr>';
+            return;
+        }
+        tableBody.innerHTML = summary.map(item => `
+            <tr>
+                <td>${item.cropName}</td>
+                <td>${item.totalArea.toFixed(2)}</td>
+                <td>${item.totalYield}</td>
+                <td>${item.season}</td>
+            </tr>
+        `).join('');
+    }
+</script>
+</body>
+</html>

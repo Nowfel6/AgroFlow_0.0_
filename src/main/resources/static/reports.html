@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Reports - AgroFlow</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <style>
+        :root {
+          --primary-color: #1e5631;
+          --secondary-color: #4c9f70;
+          --accent-color: #d4a017;
+          --background-color: #f8f9fa;
+          --card-color: #ffffff;
+          --text-color: #333333;
+          --light-text: #6c757d;
+          --border-color: #dee2e6;
+        }
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        body {
+          font-family: "Nunito", sans-serif;
+          background-color: var(--background-color);
+          color: var(--text-color);
+          line-height: 1.6;
+        }
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+        .header {
+          background-color: var(--primary-color);
+          color: white;
+          padding: 15px 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+          display: flex;
+          align-items: center;
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
+        .user-info {
+          display: flex;
+          align-items: center;
+        }
+         .user-profile {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+        .user-profile img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          margin-right: 10px;
+        }
+        .horizontal-nav {
+          background-color: white;
+          padding: 0 30px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+          display: flex;
+          justify-content: center;
+        }
+        .nav-items {
+          display: flex;
+        }
+        .nav-item {
+          padding: 15px 20px;
+          font-weight: 600;
+          border-bottom: 3px solid transparent;
+          transition: all 0.3s;
+        }
+        .nav-item.active,
+        .nav-item:hover {
+          color: var(--primary-color);
+          border-bottom-color: var(--primary-color);
+          background-color: rgba(30, 86, 49, 0.05);
+        }
+        .main-content {
+          padding: 30px;
+          max-width: 1200px;
+          margin: auto;
+        }
+        .dashboard-section {
+          background-color: var(--card-color);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          padding: 30px;
+          margin-bottom: 30px;
+        }
+        .section-header {
+          margin-bottom: 25px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid var(--border-color);
+        }
+        .section-header h2 {
+          color: var(--primary-color);
+          font-size: 1.6rem;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .filters {
+          display: flex;
+          gap: 20px;
+          margin-bottom: 20px;
+          align-items: flex-end;
+        }
+        .form-group {
+          flex-grow: 1;
+        }
+        .form-group label {
+          font-weight: 600;
+          margin-bottom: 8px;
+          display: block;
+        }
+        .form-control {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid var(--border-color);
+          border-radius: 6px;
+          font-size: 1rem;
+          background-color: white;
+        }
+        .btn {
+          background-color: var(--primary-color);
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 1rem;
+          font-weight: 700;
+        }
+        .results-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+        }
+        .results-table th,
+        .results-table td {
+          padding: 12px 15px;
+          text-align: left;
+          border-bottom: 1px solid var(--border-color);
+        }
+        .results-table th {
+          background-color: rgba(30, 86, 49, 0.05);
+        }
+        .stats-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 20px;
+        }
+        .stat-card {
+          background-color: var(--card-color);
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .stat-card .label {
+          font-size: 1rem;
+          color: var(--light-text);
+          margin-bottom: 5px;
+        }
+        .stat-card .value {
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--primary-color);
+        }
+                /* --- REPLACE YOUR EXISTING CHART STYLES WITH THIS BLOCK --- */
+
+        .chart-container {
+          margin-top: 30px;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+        }
+        .chart-title {
+          text-align: center;
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin-bottom: 25px;
+        }
+        .chart-area {
+          display: flex;
+          justify-content: space-around;
+          align-items: flex-end; /* Aligns bars to the bottom */
+          height: 250px;
+          border-bottom: 2px solid var(--border-color);
+          padding: 0 20px;
+        }
+        .bar-group {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 30%;
+          height: 100%; /* Make the group take full height */
+          position: relative;
+        }
+        .bar {
+          width: 60px;
+          background-color: var(--secondary-color);
+          border-radius: 5px 5px 0 0;
+          position: absolute; /* Position bar within the group */
+          bottom: 0; /* Anchor the bar to the bottom */
+          transition: height 0.5s ease-out;
+          display: flex; /* Use flexbox for centering */
+          justify-content: center; /* Center horizontally */
+          align-items: flex-start; /* Align value to the top */
+        }
+        .bar .value {
+          margin-top: -25px; /* Position the value above the bar */
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          background-color: rgba(255, 255, 255, 0.8);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+        .bar-group .label {
+          position: absolute; /* Position label at the bottom */
+          bottom: -25px; /* Place it below the baseline */
+          font-weight: 600;
+          color: var(--light-text);
+        }
+        .chart-summary {
+          margin-top: 20px;
+          padding: 15px;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+        }
+        .chart-summary p {
+          margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"><i class="fas fa-leaf"></i> <span>AgroFlow</span></div>
+    <div class="user-info">
+        <div class="user-profile">
+            <img
+                    src="/images/avatar-659651_1280.png"
+                    alt="Officer"
+            />
+            <span id="userName">Officer Name</span>
+        </div>
+    </div>
+</div>
+<div class="horizontal-nav">
+    <div class="nav-items">
+        <div class="nav-item"><a href="farmer-analytic.html">Dashboard</a></div>
+        <div class="nav-item">
+            <a href="register-farmer.html">Register Farmer</a>
+        </div>
+        <div class="nav-item">
+            <a href="farmer-dashboard.html">Registered Farmers</a>
+        </div>
+        <div class="nav-item">
+            <a href="dashboard.html">Market & Crop Data</a>
+        </div>
+        <div class="nav-item">
+            <a href="sales-management.html">Sales Management</a>
+        </div>
+        <div class="nav-item active"><a href="reports.html">Reports</a></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!-- Section 1: High-Level Summary Cards -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>
+                <i class="fas fa-tachometer-alt"></i> Key Metrics for Session
+                <span id="summaryCardYear"></span>
+            </h2>
+        </div>
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="label">Total Farmers Engaged</div>
+                <div class="value" id="totalFarmersCard">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Total Cultivated Area (acres)</div>
+                <div class="value" id="totalAreaCard">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Total Harvest (kg)</div>
+                <div class="value" id="totalHarvestCard">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Top Crop (by Harvest)</div>
+                <div class="value" id="topCropCard">--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Main Interactive Report Table -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-table"></i> Nationwide & Regional Report</h2>
+        </div>
+        <div class="filters">
+            <div class="form-group">
+                <label for="sessionYearFilter">Session Year</label>
+                <select id="sessionYearFilter" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label for="regionFilter">Region</label>
+                <select id="regionFilter" class="form-control"></select>
+            </div>
+        </div>
+        <table class="results-table">
+            <thead>
+            <tr>
+                <th>Crop Name</th>
+                <th>Total Harvest (kg)</th>
+                <th>Total Area (acres)</th>
+                <th>Avg. Yield (kg/acre)</th>
+                <th>Number of Farmers</th>
+            </tr>
+            </thead>
+            <tbody id="mainReportTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Section 3: Top 10 Producing Regions Table -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-trophy"></i> Top Performing Regions by Crop</h2>
+        </div>
+        <div class="filters">
+            <div class="form-group">
+                <label for="topRegionsCropFilter">Select Crop</label>
+                <select id="topRegionsCropFilter" class="form-control"></select>
+            </div>
+        </div>
+        <table class="results-table">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Region Name</th>
+                <th>Total Harvest (kg)</th>
+            </tr>
+            </thead>
+            <tbody id="topRegionsTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Section 4: 3-Year Harvest Comparison Chart -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-line"></i> 3-Year Harvest Comparison</h2>
+        </div>
+        <form id="chartSearchForm" class="filters">
+            <div class="form-group">
+                <label for="chartCropSearch">Enter Crop Name</label>
+                <input
+                        type="text"
+                        id="chartCropSearch"
+                        class="form-control"
+                        placeholder="e.g., Rice"
+                        required
+                />
+            </div>
+            <button type="submit" class="btn">Generate Chart</button>
+        </form>
+        <div id="chartContainer" style="display: none">
+            <div class="chart-area" id="chartArea"></div>
+            <div class="chart-summary" id="chartSummary"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // =================================================================
+        // SECTION 1: LOGIN CHECK & UI SETUP
+        // =================================================================
+        const officerString = sessionStorage.getItem('loggedInOfficer');
+        let loggedInOfficer = null;
+        if (officerString) {
+            loggedInOfficer = JSON.parse(officerString);
+            document.getElementById('userName').textContent = loggedInOfficer.name;
+        } else {
+            alert("You are not logged in.");
+            window.location.href = 'login.html';
+            return; // Stop all further script execution
+        }
+
+        // Get all necessary HTML elements
+        const sessionYearFilter = document.getElementById('sessionYearFilter');
+        const regionFilter = document.getElementById('regionFilter');
+        const topRegionsCropFilter = document.getElementById('topRegionsCropFilter');
+        const mainReportTableBody = document.getElementById('mainReportTableBody');
+        const topRegionsTableBody = document.getElementById('topRegionsTableBody');
+        const chartSearchForm = document.getElementById('chartSearchForm');
+        const chartContainer = document.getElementById('chartContainer');
+
+        // =================================================================
+        // SECTION 2: HELPER FUNCTIONS FOR RENDERING
+        // =================================================================
+
+        function populateStats(data) {
+            document.getElementById('summaryCardYear').textContent = sessionYearFilter.value;
+            document.getElementById('totalFarmersCard').textContent = data.totalFarmersEngaged.toLocaleString();
+            document.getElementById('totalAreaCard').textContent = data.totalCultivatedArea.toLocaleString(undefined, {maximumFractionDigits: 2});
+            document.getElementById('totalHarvestCard').textContent = data.totalHarvestKg.toLocaleString();
+            document.getElementById('topCropCard').textContent = data.topCropByHarvest;
+        }
+
+        function populateMainReportTable(data) {
+            mainReportTableBody.innerHTML = '';
+            if (!data || data.length === 0) {
+                mainReportTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No data available for this selection.</td></tr>';
+                return;
+            }
+            data.forEach(item => {
+                const avgYield = item.totalAreaAcres > 0 ? (item.totalHarvestKg / item.totalAreaAcres).toFixed(2) : "0.00";
+                const row = `
+                    <tr>
+                        <td>${item.cropName}</td>
+                        <td>${item.totalHarvestKg.toLocaleString()}</td>
+                        <td>${Number(item.totalAreaAcres).toLocaleString(undefined, {maximumFractionDigits: 2})}</td>
+                        <td>${avgYield}</td>
+                        <td>${item.numberOfFarmers.toLocaleString()}</td>
+                    </tr>`;
+                mainReportTableBody.innerHTML += row;
+            });
+        }
+
+        function populateTopRegionsTable(data) {
+            topRegionsTableBody.innerHTML = '';
+            if (!data || data.length === 0) {
+                topRegionsTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No data available for this crop.</td></tr>';
+                return;
+            }
+            data.forEach((item, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.regionName}</td>
+                        <td>${item.totalHarvestKg.toLocaleString()}</td>
+                    </tr>`;
+                topRegionsTableBody.innerHTML += row;
+            });
+        }
+
+        // =================================================================
+        // SECTION 3: API CALLS TRIGGERED BY FILTERS
+        // =================================================================
+
+        async function updateAllReports() {
+            const year = sessionYearFilter.value;
+            const region = regionFilter.value;
+            const cropId = topRegionsCropFilter.value;
+
+            if (!year) return; // Don't run if filters are not ready
+
+            // Fetch and update all sections
+            try {
+                const [summaryRes, mainReportRes, topRegionsRes] = await Promise.all([
+                    fetch(`/api/advanced-reports/summary-cards?year=${year}`),
+                    fetch(`/api/advanced-reports/main-report?year=${year}&region=${encodeURIComponent(region)}`),
+                    fetch(`/api/advanced-reports/top-regions?year=${year}&cropId=${cropId}`)
+                ]);
+
+                const summaryData = await summaryRes.json();
+                const mainReportData = await mainReportRes.json();
+                const topRegionsData = await topRegionsRes.json();
+
+                populateStats(summaryData);
+                populateMainReportTable(mainReportData);
+                populateTopRegionsTable(topRegionsData);
+
+            } catch (error) {
+                console.error("Failed to update reports:", error);
+            }
+        }
+
+               // --- SECTION 4: 3-Year Comparison Chart (with robust logic) ---
+        chartSearchForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const cropNameInput = document.getElementById('chartCropSearch');
+            const cropName = cropNameInput.value;
+            const cropOption = [...topRegionsCropFilter.options].find(opt => opt.text.toLowerCase() === cropName.toLowerCase());
+
+            if (!cropOption || !cropOption.value) {
+                alert(`Crop "${cropName}" not found. Please select a valid crop.`);
+                return;
+            }
+            const cropId = cropOption.value;
+
+            try {
+                const response = await fetch(`/api/advanced-reports/chart-data?cropId=${cropId}`);
+                const chartData = await response.json();
+
+                console.log("Received Chart Data:", chartData); // DEBUG: Check the data from the server
+
+                const chartArea = document.getElementById('chartArea');
+                const chartSummary = document.getElementById('chartSummary');
+                chartArea.innerHTML = ''; // Clear previous chart
+
+                // Check if we have any data to display
+                if (!chartData || chartData.length === 0 || chartData.every(d => d.total === null || d.total === 0)) {
+                    chartSummary.innerHTML = `<p>No historical harvest data found for "${cropName}".</p>`;
+                    chartContainer.style.display = 'block';
+                    return;
+                }
+
+                // --- ROBUST SCALING LOGIC ---
+                // Find the maximum value from the data set for scaling
+                const maxHarvest = Math.max(...chartData.map(d => d.total || 0));
+                console.log("Max Harvest for Scaling:", maxHarvest); // DEBUG: Check the max value
+
+                chartData.sort((a, b) => a.year.localeCompare(b.year)); // Ensure years are in correct order
+
+                chartData.forEach(data => {
+                    let barHeight = 0;
+                    // Ensure total is a valid number before calculating height
+                    const totalValue = Number(data.total || 0);
+
+                    if (totalValue > 0 && maxHarvest > 0) {
+                        barHeight = (totalValue / maxHarvest) * 100;
+                    }
+
+                    console.log(`Year: ${data.year}, Total: ${totalValue}, Height: ${barHeight}%`); // DEBUG: Check calculation for each bar
+
+                    const displayValue = totalValue >= 1000 ? `${(totalValue / 1000).toFixed(1)}k` : totalValue;
+                    const barGroup = document.createElement('div');
+                    barGroup.className = 'bar-group';
+                    barGroup.innerHTML = `
+                        <div class="bar" style="height: ${barHeight}%;">
+                            <div class="value">${displayValue}</div>
+                        </div>
+                        <div class="label">${data.year}</div>`;
+                    chartArea.appendChild(barGroup);
+                });
+
+                // --- Analytics Summary (with checks for valid data) ---
+                const validChartData = chartData.filter(d => d.total !== null);
+                if (validChartData.length > 0) {
+                    const firstYearData = validChartData[0];
+                    const lastYearData = validChartData[validChartData.length - 1];
+                    const growth = firstYearData.total > 0 ? ((lastYearData.total - firstYearData.total) / firstYearData.total) * 100 : 0;
+                    const bestYear = validChartData.reduce((max, item) => item.total > max.total ? item : max);
+                    const average = validChartData.reduce((sum, item) => sum + item.total, 0) / validChartData.length;
+
+                    chartSummary.innerHTML = `
+                        <p><i class="fas fa-chart-line"></i> <strong>Total Growth:</strong> ${cropName} production has ${growth >= 0 ? 'increased' : 'decreased'} by <strong>${Math.abs(growth).toFixed(1)}%</strong> over the last ${validChartData.length} years.</p>
+                        <p><i class="fas fa-star"></i> <strong>Best Year:</strong> The highest yield was recorded in <strong>${bestYear.year}</strong> with <strong>${bestYear.total.toLocaleString()} kg</strong>.</p>
+                        <p><i class="fas fa-balance-scale"></i> <strong>Average Production:</strong> The average annual production was <strong>${Math.round(average).toLocaleString()} kg</strong>.</p>
+                    `;
+                }
+
+                chartContainer.style.display = 'block';
+
+            } catch (error) {
+                console.error("Failed to generate chart:", error);
+                chartSummary.innerHTML = `<p>An error occurred while generating the chart.</p>`;
+                chartContainer.style.display = 'block';
+            }
+        });
+        // =================================================================
+        // SECTION 5: INITIALIZATION
+        // =================================================================
+        async function initializePage() {
+            try {
+                const response = await fetch('/api/advanced-reports/filters');
+                const filterData = await response.json();
+
+                // Populate filters
+                filterData.sessionYears.forEach(year => sessionYearFilter.add(new Option(year, year)));
+                regionFilter.add(new Option('All Regions', 'All Regions'));
+                filterData.regions.forEach(region => regionFilter.add(new Option(region, region)));
+                filterData.crops.forEach(crop => topRegionsCropFilter.add(new Option(crop.name, crop.id)));
+
+                // Add event listeners that trigger the updates
+                sessionYearFilter.addEventListener('change', updateAllReports);
+                regionFilter.addEventListener('change', updateAllReports);
+                topRegionsCropFilter.addEventListener('change', updateAllReports);
+
+                // Initial data load for all sections
+                updateAllReports();
+
+            } catch(error) {
+                console.error("Failed to initialize page filters:", error);
+            }
+        }
+
+        initializePage();
+
+    }); // --- END OF DOMContentLoaded LISTENER ---
+</script>
+</body>
+</html>
