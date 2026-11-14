@@ -201,16 +201,28 @@ Then open **http://localhost:8080** 🎉
 
 ### Configuration
 
-Defaults live in `src/main/resources/application.properties`:
+Credentials are **not stored in the repository**. `src/main/resources/application.properties` reads from environment variables (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`) or an optional, gitignored `application-local.properties` file in the project root.
+
+**Option 1 — local override file (easiest):**
 
 ```properties
-spring.datasource.url=jdbc:mysql://127.0.0.1:3306/final_agroflow?createDatabaseIfNotExist=true
+# application-local.properties  (gitignored — stays on your machine)
 spring.datasource.username=root
-spring.datasource.password=1234
-spring.jpa.hibernate.ddl-auto=update
+spring.datasource.password=your_password
 ```
 
-> ⚠️ **Note:** these are local development credentials. Change the username/password (or externalize them via environment variables) before deploying anywhere.
+**Option 2 — environment variables:**
+
+```bash
+# Windows (PowerShell)
+$env:DB_USERNAME = "root"
+$env:DB_PASSWORD = "your_password"
+./mvnw.cmd spring-boot:run
+```
+
+The database `final_agroflow` is auto-created on first run; the schema is auto-generated via Hibernate `ddl-auto=update`.
+
+> ⚠️ **Note:** never commit real credentials. If a secret ever lands in git history, rotate the password.
 
 ### Build a production jar
 
