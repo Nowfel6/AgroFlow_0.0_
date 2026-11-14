@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" width="960" height="300" role="img" aria-label="AgroFlow - Farmer to Krishi Officer Portal">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b3d2e"/>
+      <stop offset="0.55" stop-color="#14532d"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fef08a"/>
+      <stop offset="0.5" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#86efac"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fde68a" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="960" height="300" rx="18" fill="url(#bg)"/>
+
+  <!-- glowing sun -->
+  <circle cx="828" cy="58" r="64" fill="url(#sunGlow)">
+    <animate attributeName="r" values="56;70;56" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="828" cy="58" r="20" fill="#fcd34d">
+    <animate attributeName="fill-opacity" values="1;0.7;1" dur="6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- fireflies -->
+  <circle r="2.5" fill="#fde68a" opacity="0.8">
+    <animateMotion dur="11s" repeatCount="indefinite" path="M340 70 q60 40 120 10 q70 -30 130 20"/>
+    <animate attributeName="opacity" values="0.9;0.2;0.9" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="2" fill="#a7f3d0" opacity="0.7">
+    <animateMotion dur="14s" repeatCount="indefinite" path="M430 100 q-70 30 -140 5 q-60 -20 -110 25"/>
+    <animate attributeName="opacity" values="0.2;0.9;0.2" dur="4s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- rolling field silhouettes -->
+  <path d="M0 262 Q 240 214 480 248 T 960 240 L960 300 L0 300 Z" fill="#0e5c3f" opacity="0.9"/>
+  <path d="M0 278 Q 300 240 600 272 T 960 268 L960 300 L0 300 Z" fill="#07301f"/>
+
+  <!-- ===== growing wheat stalks ===== -->
+  <g stroke-linecap="round" fill="none">
+    <!-- stalk 1 -->
+    <path d="M96 268 C94 232 102 210 96 176" stroke="#4ade80" stroke-width="3.5" stroke-dasharray="100" stroke-dashoffset="100">
+      <animate attributeName="stroke-dashoffset" values="100;0;0;100" keyTimes="0;0.32;0.86;1" dur="5.5s" repeatCount="indefinite"/>
+    </path>
+    <g fill="#fbbf24">
+      <ellipse cx="96" cy="168" rx="5" ry="11">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.4;0.86;1" dur="5.5s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="88" cy="176" rx="4" ry="8" transform="rotate(-24 88 176)">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.34;0.44;0.86;1" dur="5.5s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="104" cy="176" rx="4" ry="8" transform="rotate(24 104 176)">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.34;0.44;0.86;1" dur="5.5s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+    <!-- stalk 2 -->
+    <path d="M132 272 C130 240 138 218 132 190" stroke="#22c55e" stroke-width="3.5" stroke-dasharray="90" stroke-dashoffset="90">
+      <animate attributeName="stroke-dashoffset" values="90;0;0;90" keyTimes="0;0.32;0.86;1" dur="5.5s" begin="0.9s" repeatCount="indefinite"/>
+    </path>
+    <g fill="#f59e0b">
+      <ellipse cx="132" cy="182" rx="4.5" ry="10">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.4;0.86;1" dur="5.5s" begin="0.9s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="125" cy="190" rx="3.5" ry="7" transform="rotate(-24 125 190)">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.34;0.44;0.86;1" dur="5.5s" begin="0.9s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="139" cy="190" rx="3.5" ry="7" transform="rotate(24 139 190)">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.34;0.44;0.86;1" dur="5.5s" begin="0.9s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+    <!-- stalk 3 -->
+    <path d="M62 274 C60 246 68 228 62 204" stroke="#4ade80" stroke-width="3" stroke-dasharray="80" stroke-dashoffset="80">
+      <animate attributeName="stroke-dashoffset" values="80;0;0;80" keyTimes="0;0.32;0.86;1" dur="5.5s" begin="1.7s" repeatCount="indefinite"/>
+    </path>
+    <g fill="#fbbf24">
+      <ellipse cx="62" cy="196" rx="4" ry="9">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.3;0.4;0.86;1" dur="5.5s" begin="1.7s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="56" cy="203" rx="3" ry="6" transform="rotate(-24 56 203)">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.34;0.44;0.86;1" dur="5.5s" begin="1.7s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="68" cy="203" rx="3" ry="6" transform="rotate(24 68 203)">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.34;0.44;0.86;1" dur="5.5s" begin="1.7s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+    <!-- swaying leaf -->
+    <path d="M150 272 q26 -6 34 -30 q-30 2 -34 30z" fill="#16a34a" opacity="0.9">
+      <animateTransform attributeName="transform" type="rotate" values="-2 150 272;3 150 272;-2 150 272" dur="4s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- ===== title block ===== -->
+  <text x="238" y="112" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="66" font-weight="800" fill="url(#titleGrad)" letter-spacing="1">AgroFlow</text>
+  <text x="242" y="152" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" fill="#d1fae5">Farmer &#8594; Krishi Officer Portal</text>
+  <text x="242" y="184" font-family="Consolas, monospace" font-size="14" fill="#86efac">Java 21 &#8226; Spring Boot 3.5.5 &#8226; MySQL &#8226; REST API</text>
+
+  <!-- ===== animated data pipeline ===== -->
+  <!-- connector rail (drawn first, dot travels behind the cards) -->
+  <line x1="372" y1="248" x2="944" y2="248" stroke="#34d399" stroke-width="2" stroke-dasharray="7 8" opacity="0.65">
+    <animate attributeName="stroke-dashoffset" values="0;-60" dur="2.4s" repeatCount="indefinite"/>
+  </line>
+  <circle r="4.5" fill="#fef08a">
+    <animateMotion dur="3.6s" repeatCount="indefinite" path="M372 248 L944 248"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.08;0.92;1" dur="3.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- cards -->
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <g>
+      <rect x="372" y="228" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.1" stroke="#4ade80" stroke-opacity="0.5"/>
+      <text x="436" y="253" font-size="15" fill="#ecfdf5">&#129378; Farmer</text>
+      <animate attributeName="opacity" values="0;1" begin="0.2s" dur="0.6s" fill="freeze"/>
+    </g>
+    <g>
+      <rect x="520" y="228" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.1" stroke="#4ade80" stroke-opacity="0.5"/>
+      <text x="584" y="253" font-size="15" fill="#ecfdf5">&#128104;&#8205;&#127891; Krishi Officer</text>
+      <animate attributeName="opacity" values="0;1" begin="0.5s" dur="0.6s" fill="freeze"/>
+    </g>
+    <g>
+      <rect x="668" y="228" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.1" stroke="#4ade80" stroke-opacity="0.5"/>
+      <text x="732" y="253" font-size="15" fill="#ecfdf5">&#128230; Sale</text>
+      <animate attributeName="opacity" values="0;1" begin="0.8s" dur="0.6s" fill="freeze"/>
+    </g>
+    <g>
+      <rect x="816" y="228" width="128" height="40" rx="10" fill="#ffffff" fill-opacity="0.1" stroke="#fbbf24" stroke-opacity="0.6"/>
+      <text x="880" y="253" font-size="15" fill="#fef9c3">&#127974; Payment</text>
+      <animate attributeName="opacity" values="0;1" begin="1.1s" dur="0.6s" fill="freeze"/>
+    </g>
+  </g>
+</svg>
