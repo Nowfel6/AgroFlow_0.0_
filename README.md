@@ -48,22 +48,9 @@ Officers manage the complete lifecycle: from registering farmers and planning cr
 
 ## 🏗️ Architecture
 
-```mermaid
-flowchart LR
-    A["🖥️ Browser<br/>17 static HTML pages<br/>fetch() → REST"] -->|"/api/*"| B["⚙️ Spring Boot 3.5.5<br/>13 Controllers"]
-    B --> C["🧠 Services (11)<br/>business rules &amp; validation"]
-    C --> D["📦 Spring Data JPA<br/>12 Repositories"]
-    D --> E[("🐬 MySQL<br/>final_agroflow")]
-
-    subgraph Domain["🌿 Domain Model (12 entities)"]
-        F1["KrishiOfficer"] --> F2["Farmer"]
-        F2 --> F3["Field"]
-        F3 --> F4["CropPlan"]
-        F4 --> F5["Harvest"]
-        F5 --> F6["SaleRequest"]
-        F6 --> F7["Sales"]
-    end
-```
+<p align="center">
+  <img src="assets/architecture.svg" alt="AgroFlow architecture" width="100%" />
+</p>
 
 ---
 
@@ -130,38 +117,9 @@ agroflow_noppo/
 
 ## 🗃️ Data Model
 
-```mermaid
-erDiagram
-    KrishiOfficer ||--o{ Farmer : manages
-    Farmer ||--o{ Field : owns
-    Field ||--o{ CropPlan : hosts
-    Crop ||--o{ CropPlan : describes
-    CropPlan ||--|| Harvest : yields
-    Harvest ||--|| SaleRequest : sold-via
-    SaleRequest ||--|| Sales : fulfilled-by
-    Crop ||--o{ MarketPrice : priced
-    Farmer }o--|| KrishiOfficer : supervised-by
-
-    Farmer {
-        string name
-        string nid
-        string district
-        string village
-    }
-    CropPlan {
-        date planting_date
-        date expected_harvest
-        string status
-        float expected_yield
-    }
-    SaleRequest {
-        float quantity
-        float price_per_kg
-        string delivery_status
-        string bank_account
-        string payment_mode
-    }
-```
+<p align="center">
+  <img src="assets/erdiagram.png" alt="AgroFlow entity relationship diagram" width="480" />
+</p>
 
 > Cyclic entity relations are handled with `@JsonManagedReference` / `@JsonBackReference` for clean JSON serialization.
 
